@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset=utf-8>
+		<title>ncraft</title>
+		<style>
+			body { margin: 0; }
+			canvas { width: 100%; height: 100% }
+		</style>
+	</head>
+	<body>
+		<script src="three.js"></script>
+		<script>
+			let NCraft = require("./lib/lib")
+			let texture = new THREE.CubeTextureLoader().setPath("cubetextures/").load(["cube.png","cube.png","cube.png","cube.png","cube.png","cube.png"], function(texture) {
+				let material = new THREE.MeshLambertMaterial({color: 0x0000ff});
+				let geometry = new THREE.BoxBufferGeometry(1,1,1);
+				let mesh = new THREE.Mesh(geometry,material);
+				let game = new NCraft.Game();
+				game.register_mesh(mesh,"blue");
+				let blocks = [];
+				for (let x = 0; x < 16; x++) {
+					for (let z = 0; z < 16; z++) {
+						blocks.push(new NCraft.Block("blue",game,{ x: x, y: 1, z: z}));
+					}
+				}
+				let chunk = new NCraft.Chunk(blocks,0,0);
+				chunk.merge();
+				chunk.add(game.scene);
+				game.update();
+			});
+		</script>
+	</body>
+</html>
